@@ -6,6 +6,7 @@ import Features from "@/components/sections/Features"
 import About from "@/components/sections/About"
 import Stats from "@/components/sections/Stats"
 import Footer from "@/components/sections/Footer"
+import CTA from "@/components/sections/CTA"
 
 export default function LandingPage() {
   return (
@@ -16,6 +17,7 @@ export default function LandingPage() {
         <Features />
         <About />
         <Stats />
+        <CTA />
       </main>
       <Footer />
     </div>
