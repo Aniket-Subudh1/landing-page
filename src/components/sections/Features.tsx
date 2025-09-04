@@ -57,7 +57,7 @@ const Features: React.FC = () => {
   ]
 
   return (
-    <section id="features" className="py-20 lg:py-32 bg-gradient-to-br from-gray-50 to-white">
+    <section id="features" className="py-12 lg:pb-16 pt-10 bg-gradient-to-br from-gray-50 to-white">
       <Container>
         {/* Header */}
         <div className="text-center max-w-4xl mx-auto mb-16">
@@ -127,7 +127,7 @@ const Features: React.FC = () => {
                   </p>
                   <div className="bg-white/20 backdrop-blur-md rounded-xl p-4">
                     <div className="text-sm text-white/70">Expected Launch</div>
-                    <div className="text-2xl font-bold">Q2 2024</div>
+                    <div className="text-2xl font-bold">Q4 2025</div>
                   </div>
                 </div>
               </div>

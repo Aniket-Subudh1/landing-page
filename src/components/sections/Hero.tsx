@@ -37,12 +37,12 @@ const Hero: React.FC = () => {
               <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-tight animate-fade-in-up">
                 <span className="text-gray-900">Transform Your</span>
                 <br />
-                <span className="text-gradient">PG Management</span>
+                <span className="text-gradient">PG / HOSTEL Management</span>
                 <br />
                 <span className="text-gray-900">Experience</span>
               </h1>
               
-              <p className="text-xl md:text-2xl text-gray-600 max-w-2xl leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <p className="text-xl md:text-2xl text-gray-800 max-w-2xl leading-relaxed animate-fade-in-up font-light tracking-wide" style={{ animationDelay: '0.2s', fontFamily: '"Inter", "Segoe UI", -apple-system, sans-serif' }}>
                 Say goodbye to manual processes and embrace the future of property management with EasyMyPG - the complete digital solution for PG and hostel owners.
               </p>
             </div>

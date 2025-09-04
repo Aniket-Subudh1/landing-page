@@ -1,7 +1,4 @@
-// import { NextConfig } from "next"; // Not needed in JS
+/** @type {import('next').NextConfig} */
+const nextConfig = {}
 
-const nextConfig = {
-  /* config options here */
-};
-
-export default nextConfig;
+export default nextConfig

@@ -52,7 +52,7 @@ const Stats: React.FC = () => {
   ]
 
   return (
-    <section className="py-20 lg:py-32 bg-gradient-to-br from-primary-50 via-white to-secondary-50">
+    <section className="py-12 lg:pb-16 pt-10 bg-gradient-to-br from-primary-50 via-white to-secondary-50">
       <Container>
         {/* Header */}
         <div className="text-center max-w-4xl mx-auto mb-16">
@@ -146,7 +146,7 @@ const Stats: React.FC = () => {
               <div className="text-3xl font-bold mb-2">Phase 2</div>
               <div className="text-white/80">Development</div>
               <div className="w-full bg-white/20 rounded-full h-2 mt-2">
-                <div className="bg-white h-2 rounded-full w-3/4"></div>
+                <div className="bg-white h-2 rounded-full w-2/5"></div>
               </div>
             </div>
             
@@ -154,7 +154,7 @@ const Stats: React.FC = () => {
               <div className="text-3xl font-bold mb-2">Phase 3</div>
               <div className="text-white/80">Beta Testing</div>
               <div className="w-full bg-white/20 rounded-full h-2 mt-2">
-                <div className="bg-white h-2 rounded-full w-1/2"></div>
+                <div className="bg-white h-2 rounded-full w-1/6"></div>
               </div>
             </div>
           </div>

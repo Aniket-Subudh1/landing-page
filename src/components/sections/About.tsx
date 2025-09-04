@@ -52,7 +52,7 @@ const About: React.FC = () => {
   ]
 
   return (
-    <section id="about" className="py-20 lg:py-32 bg-white">
+    <section id="about" className="py-12 lg:pb-16 pt-10 bg-white">
       <Container>
         {/* Header */}
         <div className="text-center max-w-4xl mx-auto mb-16">

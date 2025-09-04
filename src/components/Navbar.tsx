@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import React, { useState, useEffect } from 'react'
@@ -43,10 +44,14 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-xl">E</span>
+            <div className="w-10 h-10 flex items-center justify-center">
+              <img 
+              src="/logo.png" 
+              alt="EasyMyPG Logo" 
+              className="w-10 h-10 object-contain"
+              />
             </div>
-            <span className="text-xl lg:text-2xl font-bold text-gray-900">
+            <span className="text-xl lg:text-2xl mt-3 font-bold text-gray-900">
               Easy<span className="text-primary-600">MyPG</span>
             </span>
           </div>
