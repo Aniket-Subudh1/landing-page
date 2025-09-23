@@ -14,10 +14,11 @@ export default function LandingPage() {
       <Navbar />
       <main>
         <Hero />
+        <CTA />
         <Features />
         <About />
         <Stats />
-        <CTA />
+        
       </main>
       <Footer />
     </div>
