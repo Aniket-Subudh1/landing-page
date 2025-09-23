@@ -111,7 +111,8 @@ const PGComparison: React.FC = () => {
   ]
 
   return (
-    <section className="py-8 md:py-16 bg-gradient-to-br from-gray-50 via-white to-gray-100 min-h-screen relative overflow-hidden">
+    <section className="py-8 md:py-16 bg-gradient-to-br from-gray-50 via-white to-gray-100 min-h-screen relative overflow-hidden   [mask-image:linear-gradient(to_bottom,black_90%,transparent_100%)] 
+                  [mask-repeat:no-repeat] [mask-size:100%]">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>

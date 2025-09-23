@@ -1,5 +1,5 @@
 'use client'
-
+import Link from 'next/link'
 import React, { useMemo } from 'react'
 import Image from 'next/image'
 import { motion, Variants } from 'framer-motion'
@@ -272,6 +272,7 @@ const Hero: React.FC = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-row gap-2 sm:gap-4 justify-center mb-6 w-full max-w-md sm:max-w-none mx-auto">
+          <Link href="/waitlist">
           <motion.button 
             className="flex-1 sm:flex-none px-4 sm:px-8 py-2.5 sm:py-3 rounded-lg border border-black text-sm sm:text-base font-semibold transition-all duration-300 whitespace-nowrap"
             style={{
@@ -309,7 +310,7 @@ const Hero: React.FC = () => {
           >
             Get Early Access
           </motion.button>
-          
+          </Link>
           <motion.button 
             className="flex-1 sm:flex-none bg-white text-black border border-black px-4 sm:px-8 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-semibold shadow-md whitespace-nowrap"
             initial="hidden"

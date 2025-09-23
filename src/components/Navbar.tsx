@@ -2,9 +2,9 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Menu, X, ChevronDown } from 'lucide-react'
+import { Menu, X, ChevronDown, Link as LinkIcon } from 'lucide-react'
 import Image from 'next/image'
-
+import Link from 'next/link'
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -56,12 +56,15 @@ const Navbar: React.FC = () => {
 
         {/* Action Buttons */}
         <div className="hidden lg:flex items-center space-x-3">
+         
           <button className="px-4 py-2 text-sm font-medium bg-white rounded-lg border border-black text-black hover:text-gray-600 transition-colors duration-200">
             Free Access
           </button>
+         <Link href="/waitlist">
           <button className="px-6 py-2 bg-yellow-400 border border-black hover:bg-yellow-500 text-gray-900 font-semibold text-sm rounded-lg transition-colors duration-200">
             Download Now
           </button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -91,9 +94,11 @@ const Navbar: React.FC = () => {
               <button className="w-full px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border border-black/30 bg-white/80 rounded-lg transition-colors duration-200">
                 Free Access
               </button>
+              <Link href="/waitlist">
               <button className="w-full px-6 py-2 bg-yellow-400 border border-black hover:bg-yellow-500 text-gray-900 font-semibold text-sm rounded-lg transition-colors duration-200">
                 Download Now
               </button>
+              </Link>
             </div>
           </div>
         </div>

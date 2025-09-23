@@ -13,7 +13,7 @@ import Features3 from "@/components/sections/Features3"
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-legal-bg-primary via-warm-100 to-legal-bg-secondary">
-      <Navbar />
+   
       <main>
         <Hero />
         <CTA />

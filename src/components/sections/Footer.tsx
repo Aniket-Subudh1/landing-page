@@ -33,7 +33,7 @@ const HeroCTA: React.FC = () => {
   }, [])
 
   return (
-    <section ref={sectionRef} className="w-full px-4 md:px-6 mb-20 lg:px-10">
+    <section ref={sectionRef} className="w-full px-4 md:px-6 mt-10 mb-20 lg:px-10">
     
       <div className="relative mx-auto max-w-[1400px] h-[400px] sm:h-[450px] lg:h-[500px] rounded-[28px] bg-[#1A0422] text-white overflow-hidden">
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-0">
