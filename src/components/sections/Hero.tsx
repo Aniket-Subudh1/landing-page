@@ -8,8 +8,12 @@ const Hero: React.FC = () => {
     <section id="home" className="min-h-screen relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-full h-full md:max-w-[1500px] md:max-h-[860px] md:-mt-[270px] md:rounded-3xl bg-gradient-to-b from-pink-100 via-yellow-100 to-yellow-400"></div>
-      </div>
+  <div className="w-full h-full md:max-w-[1500px] md:max-h-[860px] md:-mt-[250px] md:rounded-3xl 
+    [background:linear-gradient(145deg,#ffdbe1_0%,#fff1bd_40%,#fff1bd_60%,#ffcb0f_100%)]">
+  </div>
+</div>
+
+
 
       <div className="relative z-10 top-10 flex flex-col items-center justify-center text-center px-4 py-16 max-w-7xl mx-auto">
 
