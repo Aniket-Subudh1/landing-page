@@ -19,7 +19,6 @@ const Hero: React.FC = () => {
     ["Already", "500+", "PGs", "on", "the", "waitlist.", "Don't", "miss", "your", "spot."], []
   );
 
-  // Animation variants with explicit typing
   const badgeVariants: Variants = {
     hidden: { 
       opacity: 0, 
@@ -274,13 +273,13 @@ const Hero: React.FC = () => {
         {/* CTA Buttons */}
         <div className="flex flex-row gap-2 sm:gap-4 justify-center mb-6 w-full max-w-md sm:max-w-none mx-auto">
           <motion.button 
-            className="flex-1 sm:flex-none px-4 sm:px-8 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-all duration-300 whitespace-nowrap"
+            className="flex-1 sm:flex-none px-4 sm:px-8 py-2.5 sm:py-3 rounded-lg border border-black text-sm sm:text-base font-semibold transition-all duration-300 whitespace-nowrap"
             style={{
               backgroundColor: 'rgb(255, 204, 17)',
               color: 'black',
               borderWidth: '1px',
               borderStyle: 'solid',
-              borderColor: 'rgba(41, 0, 41, 0.2)',
+              borderColor: 'rgba(7, 7, 7, 0.2)',
               borderRadius: '8px',
               boxShadow: 'rgba(32, 0, 36, 0.05) 0px 1px 2px 0px, rgba(255, 255, 255, 0.4) 0px 10px 24px -10px inset'
             }}
@@ -312,7 +311,7 @@ const Hero: React.FC = () => {
           </motion.button>
           
           <motion.button 
-            className="flex-1 sm:flex-none bg-white text-black px-4 sm:px-8 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-semibold shadow-md whitespace-nowrap"
+            className="flex-1 sm:flex-none bg-white text-black border border-black px-4 sm:px-8 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-semibold shadow-md whitespace-nowrap"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
