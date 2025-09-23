@@ -4,6 +4,7 @@
 import React, { useState } from 'react'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import Image from 'next/image'
+
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -24,16 +25,17 @@ const Navbar: React.FC = () => {
   }
 
   return (
-    <nav className="fixed z-50 left-1/2 transform -translate-x-1/2 top-4 w-11/12 max-w-6xl backdrop-blur-lg rounded-2xl border border-black/30 shadow-sm">
-      <div className="flex items-center justify-between px-6 py-3">
+    <nav className="fixed z-50 left-1/2 transform -translate-x-1/2 top-4 w-11/12 max-w-7xl backdrop-blur-lg rounded-2xl border border-black/30 shadow-sm">
+      <div className="flex items-center justify-between px-4 py-2">
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <Image
-          src="/logo.png"
-          alt='logo'
-          height={30}
-          width={30}          />
-          <span className="text-lg font-semibold text-gray-900">
+            src="/logo.png"
+            alt='logo'
+            height={30}
+            width={30}
+          />
+          <span className="text-lg font-extrabold text-gray-900">
             Easy My Pg
           </span>
         </div>
@@ -54,10 +56,10 @@ const Navbar: React.FC = () => {
 
         {/* Action Buttons */}
         <div className="hidden lg:flex items-center space-x-3">
-          <button className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors duration-200">
+          <button className="px-4 py-2 text-sm font-medium bg-white rounded-lg border border-black text-black hover:text-gray-600 transition-colors duration-200">
             Free Access
           </button>
-          <button className="px-6 py-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold text-sm rounded-lg transition-colors duration-200">
+          <button className="px-6 py-2 bg-yellow-400 border border-black hover:bg-yellow-500 text-gray-900 font-semibold text-sm rounded-lg transition-colors duration-200">
             Download Now
           </button>
         </div>
@@ -73,23 +75,23 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Navigation */}
       {isOpen && (
-        <div className="lg:hidden mt-2 pb-4 border-t border-gray-200/50 bg-white/90 backdrop-blur-md rounded-b-2xl">
+        <div className="lg:hidden mt-2 pb-4 border-t border-black/30 backdrop-blur-lg rounded-b-2xl shadow-sm">
           <div className="pt-4 space-y-2">
             {navItems.map((item) => (
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.href)}
-                className="flex items-center justify-between w-full px-6 py-3 text-left text-gray-600 hover:text-gray-900 hover:bg-gray-100/30 rounded-lg transition-all duration-200"
+                className="flex items-center justify-between w-full px-6 py-3 text-left text-gray-600 hover:text-gray-900 hover:bg-white/20 rounded-lg transition-all duration-200"
               >
                 <span className="font-medium text-sm">{item.name}</span>
                 {item.hasDropdown && <ChevronDown className="w-4 h-4" />}
               </button>
             ))}
             <div className="px-6 pt-4 space-y-3">
-              <button className="w-full px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border border-gray-300 rounded-lg transition-colors duration-200">
+              <button className="w-full px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border border-black/30 bg-white/80 rounded-lg transition-colors duration-200">
                 Free Access
               </button>
-              <button className="w-full px-6 py-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold text-sm rounded-lg transition-colors duration-200">
+              <button className="w-full px-6 py-2 bg-yellow-400 border border-black hover:bg-yellow-500 text-gray-900 font-semibold text-sm rounded-lg transition-colors duration-200">
                 Download Now
               </button>
             </div>
