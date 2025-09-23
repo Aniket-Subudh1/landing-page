@@ -1,9 +1,7 @@
-import Navbar from '@/components/Navbar'
 import './globals.css'
 import { Inter } from 'next/font/google'
 
-
-export const inter = Inter({
+const inter = Inter({
   subsets: ['latin'],
   weight: [
     '100','200','300','400','500','600','700','800','900'
@@ -32,8 +30,10 @@ export const metadata = {
     title: 'EasyMyPG - Simplify Your PG Management',
     description: 'Transform your PG and hostel management with EasyMyPG.',
   },
- icons: {
-    icon: "/favicon.ico",
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png',
   },
 }
 
@@ -53,7 +53,6 @@ export default function RootLayout({
       <body
         className={`${inter.className} bg-white text-gray-900 antialiased`}
       >
-      <Navbar />
         {children}
       </body>
     </html>
