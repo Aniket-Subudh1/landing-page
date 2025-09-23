@@ -1,6 +1,7 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 
+
 export const inter = Inter({
   subsets: ['latin'],
   weight: [
@@ -30,6 +31,9 @@ export const metadata = {
     title: 'EasyMyPG - Simplify Your PG Management',
     description: 'Transform your PG and hostel management with EasyMyPG.',
   },
+ icons: {
+    icon: "/favicon.ico",
+  },
 }
 
 export default function RootLayout({
@@ -39,9 +43,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`scroll-smooth ${inter.variable}`}>
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+      </head>
       <body
         className={`${inter.className} bg-white text-gray-900 antialiased`}
       >
+       
         {children}
       </body>
     </html>
