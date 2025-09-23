@@ -4,23 +4,23 @@ import React, { useState } from 'react'
 import { NotebookPen } from 'lucide-react'
 import Container from '../ui/Container'
 
-const Features: React.FC = () => {
+const Features2: React.FC = () => {
   const features = [
     {
-      title: 'Automatic monthly Rent & Bill addition',
-      description: 'No need to calculate every month - bills are auto-added.',
+      title: 'Contactless Check-in, Hotel Style',
+      description: 'Onboard new tenants smoothly, just like a 5-star hotel.',
     },
     {
-      title: 'Automatic payment reminders on WhatsApp, SMS & Notification',
-      description: 'Easily manage rent, bills, reminders',
+      title: 'All Tenant Details in One Place',
+      description: 'Store personal, parent & renting information digitally.',
     },
     {
-      title: 'One-click Bulk WhatsApp reminder with Payment Link',
-      description: 'Easily manage rent, bills, reminders',
+      title: 'Digital KYC & Document Verification',
+      description: 'Verify or reject tenant’s govt. IDs & documents with one tap.',
     },
     {
-      title: 'Late fees start only after the grace period',
-      description: 'Easily manage rent, bills, reminders',
+      title: 'Easy Room & Property Shifting',
+      description: 'Move tenants between rooms or PGs without messy paperwork.',
     },
   ]
 
@@ -33,7 +33,7 @@ const Features: React.FC = () => {
         className="absolute inset-x-0 top-6 flex justify-center pointer-events-none"
       >
         <div
-          className="w-[370px] lg:w-[1500px] sm:w-[690px] max-w-[1400px] h-[1050px] sm:h-[1150px] lg:h-[820px] rounded-3xl"
+          className="w-[370px] lg:w-[1500px] sm:w-[700px] max-w-[1400px] h-[1080px] sm:h-[1150px] lg:h-[820px] rounded-3xl"
           style={{
             boxShadow: '0 30px 80px rgba(0,0,0,0.6)',
             background:
@@ -45,11 +45,10 @@ const Features: React.FC = () => {
       <Container className="relative z-10">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-regular text-white mb-4 leading-tight">
-            "No calls, no jhik-jhik. Har tenant se rent time pe"
+            "Tenant Onboarding & KYC - 100% Digital, Zero Paperwork"
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto px-4">
-            Now no need to call or ring every tenant's door - Collect rent from the entire
-            building in just 4 days
+            No more manual Excel sheets or pen-paper records. From joining form to KYC & police verification, payment history to tenant ledger - everything is stored and managed in one app
           </p>
         </div>
 
@@ -57,7 +56,7 @@ const Features: React.FC = () => {
           <div className="w-full flex justify-center lg:justify-start order-1 lg:order-1">
             <div className="w-full max-w-[320px] sm:max-w-[480px] lg:max-w-[720px] rounded-3xl overflow-hidden">
               <img
-                src="jj.avif"
+                src="kk.avif"
                 alt="app mockup"
                 className="w-full h-auto block"
                 style={{ display: 'block' }}
@@ -127,4 +126,4 @@ const Features: React.FC = () => {
   )
 }
 
-export default Features
+export default Features2

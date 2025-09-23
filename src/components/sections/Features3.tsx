@@ -2,27 +2,41 @@
 
 import React, { useState } from 'react'
 import { NotebookPen } from 'lucide-react'
-import Container from '../ui/Container'
 
-const Features: React.FC = () => {
+
+import { ReactNode } from 'react'
+
+interface ContainerProps {
+  children: ReactNode
+  className?: string
+}
+
+const Container = ({ children, className = "" }: ContainerProps) => (
+  <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${className}`}>
+    {children}
+  </div>
+)
+
+const Features = () => {
   const features = [
     {
-      title: 'Automatic monthly Rent & Bill addition',
-      description: 'No need to calculate every month - bills are auto-added.',
+      title: 'Full Floor Plan in Your Pocket',
+      description: 'Instantly see every room and bed on your phone. No need to remember sharing types.',
     },
     {
-      title: 'Automatic payment reminders on WhatsApp, SMS & Notification',
-      description: 'Easily manage rent, bills, reminders',
+      title: 'Live Status of Tenants',
+      description: 'Know which beds are filled, vacant, or under notice in real time.',
     },
     {
-      title: 'One-click Bulk WhatsApp reminder with Payment Link',
-      description: 'Easily manage rent, bills, reminders',
+      title: 'Real-time room status updates',
+      description: 'Real-time update of filled, vacant, under notice rooms & beds',
     },
     {
-      title: 'Late fees start only after the grace period',
-      description: 'Easily manage rent, bills, reminders',
+      title: 'Allot or block Room & bed in one click',
+      description: 'Simplify room and bed assignments in one step',
     },
   ]
+
 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
@@ -33,7 +47,7 @@ const Features: React.FC = () => {
         className="absolute inset-x-0 top-6 flex justify-center pointer-events-none"
       >
         <div
-          className="w-[370px] lg:w-[1500px] sm:w-[690px] max-w-[1400px] h-[1050px] sm:h-[1150px] lg:h-[820px] rounded-3xl"
+          className="w-[370px] lg:w-[1500px] sm:w-[700px] max-w-[1400px] h-[1080px] sm:h-[1150px] lg:h-[820px] rounded-3xl"
           style={{
             boxShadow: '0 30px 80px rgba(0,0,0,0.6)',
             background:
@@ -45,19 +59,19 @@ const Features: React.FC = () => {
       <Container className="relative z-10">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-regular text-white mb-4 leading-tight">
-            "No calls, no jhik-jhik. Har tenant se rent time pe"
+            "No tracking, no tension. Har room ka status phone pe."
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto px-4">
-            Now no need to call or ring every tenant's door - Collect rent from the entire
-            building in just 4 days
+           Forget running behind registers, Excel sheets, or calling wardens. Now you can see which rooms are filled, vacant, or under notice
           </p>
         </div>
 
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[50vh]">
-          <div className="w-full flex justify-center lg:justify-start order-1 lg:order-1">
+          {/* Image section */}
+          <div className="w-full flex justify-center lg:justify-start order-1 lg:order-2">
             <div className="w-full max-w-[320px] sm:max-w-[480px] lg:max-w-[720px] rounded-3xl overflow-hidden">
               <img
-                src="jj.avif"
+                src="kk.avif"
                 alt="app mockup"
                 className="w-full h-auto block"
                 style={{ display: 'block' }}
@@ -65,13 +79,13 @@ const Features: React.FC = () => {
             </div>
           </div>
 
-          <div className="w-full space-y-4 lg:space-y-6 max-w-xl mx-auto lg:mx-0 order-2 lg:order-2 px-4 lg:px-0">
+          <div className="w-full space-y-4 lg:space-y-6 max-w-xl mx-auto lg:mx-0 order-2 lg:order-1 px-4 lg:px-0">
             {features.map((feature, i) => {
               const isHovered = i === hoveredIndex
               return (
                 <div
                   key={i}
-                  onMouseEnter={() => setHoveredIndex(i)}
+                  onMouseEnter={() => setHoveredIndex(null)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   className={`
                     group w-full text-left flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl transition-all duration-300 cursor-pointer
@@ -84,6 +98,7 @@ const Features: React.FC = () => {
                     backdropFilter: isHovered ? undefined : 'blur(6px)',
                   }}
                 >
+                  {/* icon box */}
                   <div
                     className={`
                       flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center transition-all duration-300
@@ -123,7 +138,6 @@ const Features: React.FC = () => {
         </div>
       </Container>
     </section>
-    
   )
 }
 

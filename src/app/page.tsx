@@ -7,6 +7,8 @@ import About from "@/components/sections/About"
 import Stats from "@/components/sections/Stats"
 import Footer from "@/components/sections/Footer"
 import CTA from "@/components/sections/CTA"
+import Features2 from "@/components/sections/Features2"
+import Features3 from "@/components/sections/Features3"
 
 export default function LandingPage() {
   return (
@@ -16,6 +18,8 @@ export default function LandingPage() {
         <Hero />
         <CTA />
         <Features />
+        <Features2 />
+        <Features3 />
         <About />
         <Stats />
         
