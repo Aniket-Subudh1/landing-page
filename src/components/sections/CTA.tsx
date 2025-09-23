@@ -24,7 +24,6 @@ const Testimonials = () => {
       title: 'Swastik PG , Bhubaneswar',
       avatar: '/ass.avif',
       quote: `"Earlier rent collection was full headache... tenants delay, I keep sending reminders, and complaints were all over WhatsApp.
-
 With EasyMyPG app, rent comes on time and complaints are tracked automatically. For me, it's so easy now - I just open the app and everything is clear."`
     },
     {

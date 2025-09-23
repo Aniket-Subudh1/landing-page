@@ -15,13 +15,11 @@ const CARD_SIZES = {
   gap: 10
 }
 
-// Mobile card sizes (same size for both cards on mobile)
 const MOBILE_CARD_SIZE = {
   width: '100%',
   height: 380
 }
 
-// Custom hook for intersection observer
 const useInView = (options = {}) => {
   const [isInView, setIsInView] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -30,7 +28,6 @@ const useInView = (options = {}) => {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setIsInView(true)
-        // Disconnect after first trigger to prevent re-triggering
         observer.disconnect()
       }
     }, {
@@ -140,7 +137,6 @@ const animationStyles = `
   .stagger-delay-6 { animation-delay: 0.6s; }
 `
 
-// Rent Reminder Card
 const RentReminderCard = ({ width, height, delay = '' }: { width: number | string; height: number; delay?: string }) => {
   const [ref, isInView] = useInView()
 
