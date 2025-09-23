@@ -1,14 +1,26 @@
 import './globals.css'
+import { Inter } from 'next/font/google'
 
+export const inter = Inter({
+  subsets: ['latin'],
+  weight: [
+    '100','200','300','400','500','600','700','800','900'
+  ],
+  variable: '--font-inter',
+  display: 'swap',
+})
 
 export const metadata = {
   title: 'EasyMyPG - Simplify Your PG Management',
-  description: 'Transform your PG and hostel management with EasyMyPG. Say goodbye to manual processes and embrace digital convenience for property owners.',
-  keywords: 'PG management, hostel management, property management, tenant management, digital payments',
+  description:
+    'Transform your PG and hostel management with EasyMyPG. Say goodbye to manual processes and embrace digital convenience for property owners.',
+  keywords:
+    'PG management, hostel management, property management, tenant management, digital payments',
   authors: [{ name: 'EasyMyPG Team' }],
   openGraph: {
     title: 'EasyMyPG - Simplify Your PG Management',
-    description: 'Transform your PG and hostel management with EasyMyPG. Digital solution for property owners.',
+    description:
+      'Transform your PG and hostel management with EasyMyPG. Digital solution for property owners.',
     url: 'https://easymypg.com',
     siteName: 'EasyMyPG',
     type: 'website',
@@ -26,8 +38,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`bg-white text-gray-900 antialiased`}>
+    <html lang="en" className={`scroll-smooth ${inter.variable}`}>
+      <body
+        className={`${inter.className} bg-white text-gray-900 antialiased`}
+      >
         {children}
       </body>
     </html>

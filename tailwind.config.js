@@ -10,11 +10,17 @@ module.exports = {
   	extend: {
   		fontFamily: {
   			sans: [
-  				'Poppins',
+  				'var(--font-inter)',
   				'Inter',
-  				'ui-sans-serif',
+  				'Inter Placeholder',
+  				'sans-serif',
   				'system-ui'
   			]
+  		},
+  		fontWeight: {
+  			normal: '600', // Makes normal weight SemiBold
+  			semibold: '600',
+  			bold: '700',
   		},
   		colors: {
   			yellow: {
@@ -72,18 +78,8 @@ module.exports = {
   		},
   		animation: {
   			'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-  			'slide-in-up': 'slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-  			'scale-in': 'scaleIn 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-  			'gradient-shift': 'gradientShift 6s ease-in-out infinite',
   			float: 'float 8s ease-in-out infinite',
-  			'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
-  			'bounce-slow': 'bounce 3s infinite',
-  			'spin-slow': 'spin 3s linear infinite',
-  			'pulse-custom': 'pulseCustom 2s ease-in-out infinite',
   			shimmer: 'shimmer 2.5s ease-in-out infinite',
-  			glow: 'glow 4s ease-in-out infinite',
-  			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
   		},
   		keyframes: {
   			fadeInUp: {
@@ -94,34 +90,6 @@ module.exports = {
   				'100%': {
   					opacity: '1',
   					transform: 'translateY(0)'
-  				}
-  			},
-  			slideInUp: {
-  				'0%': {
-  					opacity: '0',
-  					transform: 'translateY(25px)'
-  				},
-  				'100%': {
-  					opacity: '1',
-  					transform: 'translateY(0)'
-  				}
-  			},
-  			scaleIn: {
-  				'0%': {
-  					opacity: '0',
-  					transform: 'scale(0.9)'
-  				},
-  				'100%': {
-  					opacity: '1',
-  					transform: 'scale(1)'
-  				}
-  			},
-  			gradientShift: {
-  				'0%, 100%': {
-  					backgroundPosition: '0% 50%'
-  				},
-  				'50%': {
-  					backgroundPosition: '100% 50%'
   				}
   			},
   			float: {
@@ -135,16 +103,6 @@ module.exports = {
   					transform: 'translateY(-10px) rotate(-1deg)'
   				}
   			},
-  			pulseCustom: {
-  				'0%, 100%': {
-  					transform: 'scale(1)',
-  					opacity: '1'
-  				},
-  				'50%': {
-  					transform: 'scale(1.05)',
-  					opacity: '0.8'
-  				}
-  			},
   			shimmer: {
   				'0%': {
   					backgroundPosition: '-200% 0'
@@ -152,44 +110,10 @@ module.exports = {
   				'100%': {
   					backgroundPosition: '200% 0'
   				}
-  			},
-  			glow: {
-  				'0%, 100%': {
-  					boxShadow: '0 0 20px rgba(251, 191, 36, 0.4)'
-  				},
-  				'50%': {
-  					boxShadow: '0 0 40px rgba(251, 191, 36, 0.8), 0 0 60px rgba(251, 191, 36, 0.6)'
-  				}
-  			},
-  			'accordion-down': {
-  				from: {
-  					height: '0'
-  				},
-  				to: {
-  					height: 'var(--radix-accordion-content-height)'
-  				}
-  			},
-  			'accordion-up': {
-  				from: {
-  					height: 'var(--radix-accordion-content-height)'
-  				},
-  				to: {
-  					height: '0'
-  				}
   			}
   		},
   		backdropBlur: {
   			xs: '2px'
-  		},
-  		borderWidth: {
-  			'3': '3px'
-  		},
-  		spacing: {
-  			'18': '4.5rem',
-  			'88': '22rem'
-  		},
-  		screens: {
-  			xs: '475px'
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
