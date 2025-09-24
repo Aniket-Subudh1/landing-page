@@ -1,3 +1,4 @@
+// src/components/admin/AdminLayout.tsx
 'use client'
 import React, { useEffect, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
@@ -20,36 +21,31 @@ export default function AdminLayout({
     admin: admin?.email || null,
     loading,
     isAuthenticated,
-    isUnauthenticated
+    isUnauthenticated,
+    hasRedirected: hasRedirected.current
   })
 
-  // Reset redirect flag when we change routes
   useEffect(() => {
     if (pathname === '/admin/login') {
       hasRedirected.current = false
-    }
-  }, [pathname])
-
-  useEffect(() => {
-    // Don't do anything if we're on the login page
-    if (pathname === '/admin/login') {
       return
     }
 
-    // Only redirect if we're definitely unauthenticated and haven't already redirected
-    if (!loading && isUnauthenticated && !admin && !hasRedirected.current) {
+    if (!loading && isUnauthenticated && !hasRedirected.current) {
       console.log('Redirecting to login - user not authenticated')
       hasRedirected.current = true
       router.replace('/admin/login')
     }
-  }, [loading, isUnauthenticated, admin, pathname, router])
+    
+    if (isAuthenticated && admin) {
+      hasRedirected.current = false
+    }
+  }, [loading, isUnauthenticated, isAuthenticated, admin, pathname, router])
 
-  // If we're on the login page, just render children
   if (pathname === '/admin/login') {
     return <>{children}</>
   }
 
-  // Show loading state while checking authentication
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
@@ -61,16 +57,19 @@ export default function AdminLayout({
     )
   }
 
-  // If unauthenticated, show loading while redirect is happening
   if (isUnauthenticated && !admin) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
-        <div className="text-center">
-          <LoadingSpinner />
-          <p className="mt-4 text-gray-600">Redirecting to login...</p>
+    if (!hasRedirected.current) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
+          <div className="text-center">
+            <LoadingSpinner />
+            <p className="mt-4 text-gray-600">Redirecting to login...</p>
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
+    // If already redirected, don't render anything to avoid flash
+    return null
   }
 
   // Render admin layout if authenticated
@@ -87,13 +86,6 @@ export default function AdminLayout({
     )
   }
 
-  // Fallback loading state
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
-      <div className="text-center">
-        <LoadingSpinner />
-        <p className="mt-4 text-gray-600">Loading...</p>
-      </div>
-    </div>
-  )
+  // Fallback - shouldn't reach here normally
+  return null
 }

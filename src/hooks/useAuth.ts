@@ -1,6 +1,7 @@
 'use client'
-import { useState, useEffect, useCallback, useRef } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+
+import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 interface Admin {
   id: string
@@ -12,25 +13,64 @@ interface Admin {
 
 type AuthState = 'loading' | 'authenticated' | 'unauthenticated' | 'error'
 
-export const useAuth = () => {
-  const [admin, setAdmin] = useState<Admin | null>(null)
-  const [authState, setAuthState] = useState<AuthState>('loading')
-  const router = useRouter()
-  const pathname = usePathname()
-  const mountedRef = useRef(true)
-  const isCheckingAuth = useRef(false)
 
-  const checkAuth = useCallback(async () => {
-    // Prevent multiple simultaneous auth checks
-    if (isCheckingAuth.current) {
-      console.log('Auth check already in progress, skipping...')
+type Subscriber = () => void
+
+const store = {
+  admin: null as Admin | null,
+  authState: 'loading' as AuthState,
+  requestCounter: 0,
+  subscribers: new Set<Subscriber>(),
+  setState(next: Partial<{ admin: Admin | null; authState: AuthState }>) {
+    if (typeof next.admin !== 'undefined') this.admin = next.admin
+    if (typeof next.authState !== 'undefined') this.authState = next.authState
+    // notify
+    this.subscribers.forEach((s) => s())
+  },
+  subscribe(s: Subscriber) {
+    this.subscribers.add(s)
+    return () => this.subscribers.delete(s)
+  }
+}
+
+export const useAuth = () => {
+  const router = useRouter()
+  const [, setTick] = useState(0)
+  const mountedRef = useRef(true)
+  const hasCheckedAuth = useRef(false)
+
+ 
+  const getAdmin = () => store.admin
+  const getAuthState = () => store.authState
+
+ 
+  useEffect(() => {
+    mountedRef.current = true
+    const unsub = store.subscribe(() => {
+      if (!mountedRef.current) return
+
+      setTick((t) => t + 1)
+    })
+    return () => {
+      mountedRef.current = false
+      unsub()
+    }
+  }, [])
+
+
+  const checkAuth = async () => {
+  
+    if (hasCheckedAuth.current) {
+      console.log('Auth already checked, skipping...')
       return
     }
-    
+
     try {
-      isCheckingAuth.current = true
+      hasCheckedAuth.current = true
       console.log('Checking authentication...')
-      
+
+      const token = ++store.requestCounter
+
       const response = await fetch('/api/auth/me', {
         credentials: 'include',
         cache: 'no-store',
@@ -38,51 +78,49 @@ export const useAuth = () => {
           'Cache-Control': 'no-cache'
         }
       })
-      
+
+      if (token !== store.requestCounter) {
+        console.log('Ignored stale /api/auth/me response (token mismatch).')
+        return
+      }
+
       if (!mountedRef.current) return
-      
+
       if (response.ok) {
         const data = await response.json()
         if (data.admin) {
           console.log('Authentication successful:', data.admin.email)
-          setAdmin(data.admin)
-          setAuthState('authenticated')
+          store.setState({ admin: data.admin, authState: 'authenticated' })
         } else {
           console.log('No admin data in response')
-          setAdmin(null)
-          setAuthState('unauthenticated')
+          store.setState({ admin: null, authState: 'unauthenticated' })
         }
       } else {
         console.log('Authentication failed:', response.status)
-        setAdmin(null)
-        setAuthState('unauthenticated')
+        store.setState({ admin: null, authState: 'unauthenticated' })
       }
     } catch (error) {
       console.error('Auth check error:', error)
       if (mountedRef.current) {
-        setAdmin(null)
-        setAuthState('error')
+        store.setState({ admin: null, authState: 'error' })
       }
-    } finally {
-      isCheckingAuth.current = false
     }
-  }, [])
+  }
 
-  // Only run auth check on initial mount
   useEffect(() => {
     mountedRef.current = true
+    hasCheckedAuth.current = false
     checkAuth()
-    
     return () => {
       mountedRef.current = false
     }
-  }, []) // Remove checkAuth from dependencies to prevent loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) 
 
   const login = async (email: string, password: string) => {
     try {
-      setAuthState('loading')
       console.log('Attempting login for:', email)
-      
+
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
@@ -97,21 +135,18 @@ export const useAuth = () => {
 
       if (response.ok && data.admin) {
         console.log('Login successful:', data.admin.email)
-        setAdmin(data.admin)
-        setAuthState('authenticated')
-        
-        // Don't navigate here - let the login page handle it
+        store.setState({ admin: data.admin, authState: 'authenticated' })
+        store.requestCounter++
+        hasCheckedAuth.current = true
         return { success: true }
       } else {
         console.log('Login failed:', data.error || 'Unknown error')
-        setAdmin(null)
-        setAuthState('unauthenticated')
+        store.setState({ admin: null, authState: 'unauthenticated' })
         return { success: false, error: data.error || 'Login failed' }
       }
     } catch (error) {
       console.error('Login network error:', error)
-      setAdmin(null)
-      setAuthState('error')
+      store.setState({ admin: null, authState: 'error' })
       return { success: false, error: 'Network error. Please try again.' }
     }
   }
@@ -119,9 +154,8 @@ export const useAuth = () => {
   const logout = async () => {
     try {
       console.log('Initiating logout...')
-      setAuthState('loading')
-      
-      // Call the logout API
+      store.setState({ authState: 'loading' })
+
       try {
         const response = await fetch('/api/auth/logout', {
           method: 'POST',
@@ -131,28 +165,27 @@ export const useAuth = () => {
       } catch (apiError) {
         console.error('Logout API error (continuing anyway):', apiError)
       }
-      
-      // Clear state and navigate
-      setAdmin(null)
-      setAuthState('unauthenticated')
+
+      store.setState({ admin: null, authState: 'unauthenticated' })
+      store.requestCounter = 0
+      hasCheckedAuth.current = false
       console.log('Logout complete, redirecting to login')
       router.replace('/admin/login')
-      
     } catch (error) {
       console.error('Logout error:', error)
-      // Force logout even if something fails
-      setAdmin(null)
-      setAuthState('unauthenticated')
+      store.setState({ admin: null, authState: 'unauthenticated' })
+      store.requestCounter = 0
+      hasCheckedAuth.current = false
       router.replace('/admin/login')
     }
   }
 
   return {
-    admin,
-    authState,
-    loading: authState === 'loading',
-    isAuthenticated: authState === 'authenticated',
-    isUnauthenticated: authState === 'unauthenticated',
+    admin: getAdmin(),
+    authState: getAuthState(),
+    loading: getAuthState() === 'loading',
+    isAuthenticated: getAuthState() === 'authenticated' && getAdmin() !== null,
+    isUnauthenticated: getAuthState() === 'unauthenticated',
     login,
     logout,
     checkAuth

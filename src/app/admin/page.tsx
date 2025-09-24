@@ -34,48 +34,45 @@ const AdminDashboard = () => {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetchDashboardData()
-  }, [])
+    let mounted = true
+    
+    const fetchDashboardData = async () => {
+      try {
+        const response = await fetch('/api/waitlist?limit=5', {
+          credentials: 'include'
+        })
 
-  const fetchDashboardData = async () => {
-    try {
-      const response = await fetch('/api/waitlist?limit=5', {
-        credentials: 'include'
-      })
+        if (!mounted) return
 
-      if (response.ok) {
-        const data = await response.json()
-        setStats(data.stats)
-        setRecentEntries(data.entries)
-      } else {
-        setError('Failed to fetch dashboard data')
+        if (response.ok) {
+          const data = await response.json()
+          setStats(data.stats)
+          setRecentEntries(data.entries)
+          setError('')
+        } else if (response.status === 401) {
+          // Let the layout handle the redirect
+          console.log('Unauthorized access to dashboard')
+        } else {
+          setError('Failed to fetch dashboard data')
+        }
+      } catch (error) {
+        console.error('Dashboard fetch error:', error)
+        if (mounted) {
+          setError('Network error')
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false)
+        }
       }
-    } catch (error) {
-      console.error('Dashboard fetch error:', error)
-      setError('Network error')
-    } finally {
-      setLoading(false)
     }
-  }
 
-  if (loading) {
-    return <LoadingSpinner />
-  }
+    fetchDashboardData()
 
-  if (error) {
-    return (
-      <div className="text-center py-12">
-        <div className="text-red-500 text-lg mb-2">Error loading dashboard</div>
-        <div className="text-gray-500 text-sm">{error}</div>
-        <button
-          onClick={fetchDashboardData}
-          className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors"
-        >
-          Retry
-        </button>
-      </div>
-    )
-  }
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-IN', {
@@ -99,6 +96,25 @@ const AdminDashboard = () => {
       default:
         return 'bg-gray-100 text-gray-800'
     }
+  }
+
+  if (loading) {
+    return <LoadingSpinner />
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-red-500 text-lg mb-2">Error loading dashboard</div>
+        <div className="text-gray-500 text-sm">{error}</div>
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    )
   }
 
   return (

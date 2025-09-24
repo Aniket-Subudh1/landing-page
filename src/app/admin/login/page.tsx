@@ -1,6 +1,7 @@
+// src/app/admin/login/page.tsx
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Eye, EyeOff, LogIn, Mail, Lock } from 'lucide-react'
@@ -14,16 +15,18 @@ const LoginPage = () => {
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
+  const hasRedirected = useRef(false)
   
   const { login, loading, isAuthenticated, admin } = useAuth()
 
-  // Only redirect if user navigates directly to login page while already authenticated
+  // Only redirect once if already authenticated
   useEffect(() => {
-    if (!loading && !isSubmitting && isAuthenticated && admin) {
-      console.log('User already authenticated on page load, redirecting to admin')
+    if (!loading && isAuthenticated && admin && !hasRedirected.current) {
+      console.log('User already authenticated, redirecting to admin')
+      hasRedirected.current = true
       router.replace('/admin')
     }
-  }, [loading, isSubmitting, isAuthenticated, admin, router])
+  }, [loading, isAuthenticated, admin, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -38,11 +41,11 @@ const LoginPage = () => {
       
       if (result.success) {
         console.log('Login successful, redirecting to admin...')
-        // Redirect on successful login
+        hasRedirected.current = true // Mark as redirected before navigation
         router.replace('/admin')
       } else {
         setError(result.error || 'Login failed')
-        setIsSubmitting(false) // Only reset on failure
+        setIsSubmitting(false)
       }
     } catch (error) {
       console.error('Login submit error:', error)
@@ -51,7 +54,7 @@ const LoginPage = () => {
     }
   }
 
-  // Show loading spinner only during initial auth check (not during form submission)
+  // Show loading only during initial auth check
   if (loading && !isSubmitting) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -63,7 +66,7 @@ const LoginPage = () => {
     )
   }
 
-  // If authenticated and not currently submitting, show redirecting message
+  // If authenticated and not submitting, show redirecting message
   if (isAuthenticated && admin && !isSubmitting) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -155,7 +158,7 @@ const LoginPage = () => {
                 placeholder="admin@easymypg.com"
                 className="w-full px-4 py-3 bg-white/60 backdrop-blur-sm border border-gray-300 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-200"
                 required
-                disabled={isSubmitting || loading}
+                disabled={isSubmitting}
               />
             </div>
 
@@ -173,13 +176,13 @@ const LoginPage = () => {
                   placeholder="Enter your password"
                   className="w-full px-4 py-3 pr-12 bg-white/60 backdrop-blur-sm border border-gray-300 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-200"
                   required
-                  disabled={isSubmitting || loading}
+                  disabled={isSubmitting}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  disabled={isSubmitting || loading}
+                  disabled={isSubmitting}
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -193,7 +196,7 @@ const LoginPage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={isSubmitting || loading}
+              disabled={isSubmitting}
               className="w-full py-3 bg-[#1a0520] hover:bg-[#2e0730] text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-yellow-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center"
             >
               {isSubmitting ? (
