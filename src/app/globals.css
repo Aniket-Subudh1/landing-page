@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.word-spacing-increase {
+  word-spacing: 2px;
+}
+
+.word-spacing-decrease {
+  word-spacing: -1px;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

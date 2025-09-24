@@ -65,7 +65,7 @@ Rent is smooth, no tension of late payments. Finally feels like I'm running my P
 
   return (
     <section className="py-20 md:-mt-24 -mt-16 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto text-center px-6">
+      <div className="max-w-7xl mx-auto text-center px-4">
         {/* Animated Heading */}
         <motion.h2 
           className="text-xl sm:text-4xl lg:text-[38px] text-[#1c0a28] leading-snug mb-16"
@@ -74,11 +74,11 @@ Rent is smooth, no tension of late payments. Finally feels like I'm running my P
           viewport={{ once: true }}
           transition={{ duration: 0.3 }}
         >
-          <span className="text-lg sm:text-5xl lg:text-[38px] text-[#1c0a28] inline-block">
+          <span className="text-[20px] sm:text-5xl lg:text-[38px]  text-[#1c0a28] inline-block">
             {['"15x', 'More', 'Revenue.', '15x', 'Less', 'Stress.'].map((word, index) => (
               <motion.span
                 key={index}
-                className={`inline-block mr-2 ${
+                className={`inline-block mr-1 ${
                   word === '"15x' || word === '15x' ? 'italic font-normal' : 
                   word === 'Revenue.' || word === 'Stress.' ? 'italic font-normal' : ''
                 }`}

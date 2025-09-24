@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
   }
 
   return (
-    <nav className="fixed z-50 left-1/2 transform -translate-x-1/2 top-4 w-11/12 max-w-7xl backdrop-blur-lg rounded-2xl border border-black/30 shadow-sm">
+    <nav className="fixed z-50 left-1/2 transform -translate-x-1/2 top-4 w-11/12 max-w-7xl bg-white/40  backdrop-blur-lg rounded-2xl border border-black/30 shadow-sm">
       <div className="flex items-center justify-between px-4 py-2">
         {/* Logo */}
         <div className="flex items-center space-x-2">
@@ -35,7 +35,7 @@ const Navbar: React.FC = () => {
             height={30}
             width={30}
           />
-          <span className="text-lg font-extrabold text-gray-900">
+          <span className="text-lg font-medium text-gray-900">
             Easy My Pg
           </span>
         </div>
