@@ -70,6 +70,151 @@
     gap: 1rem !important;
   }
 }
+@media (max-width: 1023px) {
+  .admin-layout {
+    display: block;
+  }
+  
+  .admin-sidebar-mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 256px;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .admin-sidebar-mobile.open {
+    transform: translateX(0);
+  }
+  
+  .admin-content {
+    padding-top: 70px; /* Space for mobile header */
+  }
+  
+  /* Mobile table improvements */
+  .mobile-table-card {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4;
+  }
+  
+  .mobile-table-card:hover {
+    @apply shadow-md border-gray-300;
+  }
+  
+  /* Responsive text sizing */
+  .responsive-text-sm {
+    @apply text-xs;
+  }
+  
+  .responsive-text-base {
+    @apply text-sm;
+  }
+  
+  .responsive-text-lg {
+    @apply text-base;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Extra small screens */
+  .admin-page {
+    padding: 0.5rem;
+  }
+  
+  .admin-stats-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+  
+  .mobile-card-compact {
+    @apply p-3 text-sm;
+  }
+  
+  .mobile-button-small {
+    @apply px-3 py-1.5 text-xs;
+  }
+}
+
+/* Desktop improvements */
+@media (min-width: 1024px) {
+  .admin-sidebar-desktop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 256px;
+    z-index: 30;
+  }
+  
+  .admin-content-desktop {
+    margin-left: 256px;
+  }
+}
+
+/* Loading improvements */
+.loading-pulse {
+  animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Focus states for accessibility */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2;
+}
+
+/* Card hover effects */
+.hover-lift {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Status badge improvements */
+.status-badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  min-width: 80px;
+  justify-content: center;
+}
+
+/* Mobile dropdown improvements */
+.mobile-dropdown {
+  @apply absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-20;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Smooth transitions */
+.smooth-transition {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Touch-friendly buttons */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Responsive spacing */
+.responsive-padding {
+  @apply p-4 lg:p-6;
+}
+
+.responsive-margin {
+  @apply m-4 lg:m-6;
+}
 
 @layer base {
   :root {

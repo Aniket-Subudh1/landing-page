@@ -10,7 +10,7 @@ interface Admin {
   lastLogin: string
 }
 
-type AuthState = 'loading' | 'authenticated' | 'unauthenticated' | 'error'
+type AuthState = 'loading' | 'authenticated' | 'unauthenticated'
 
 export const useAuth = () => {
   const [admin, setAdmin] = useState<Admin | null>(null)
@@ -19,58 +19,79 @@ export const useAuth = () => {
   const pathname = usePathname()
   const mountedRef = useRef(true)
   const isCheckingAuth = useRef(false)
+  const hasInitialized = useRef(false)
+  const loginInProgress = useRef(false)
 
-  const checkAuth = useCallback(async () => {
+  const checkAuth = useCallback(async (skipIfAuthenticated = true) => {
+    // Skip auth check if we're already authenticated and not forced
+    if (skipIfAuthenticated && authState === 'authenticated' && admin) {
+      return true
+    }
+
     // Prevent multiple simultaneous auth checks
-    if (isCheckingAuth.current) return
+    if (isCheckingAuth.current || !mountedRef.current || loginInProgress.current) {
+      return false
+    }
     
     try {
       isCheckingAuth.current = true
-      setAuthState('loading')
       
       console.log('Checking authentication...')
       
       const response = await fetch('/api/auth/me', {
+        method: 'GET',
         credentials: 'include',
         cache: 'no-store',
         headers: {
-          'Cache-Control': 'no-cache'
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
         }
       })
       
-      if (!mountedRef.current) return
+      if (!mountedRef.current) return false
+      
+      console.log('Auth check response status:', response.status)
       
       if (response.ok) {
         const data = await response.json()
-        if (data.admin) {
+        if (data.admin && mountedRef.current) {
           console.log('Authentication successful:', data.admin.email)
           setAdmin(data.admin)
           setAuthState('authenticated')
-        } else {
-          console.log('No admin data in response')
-          setAdmin(null)
-          setAuthState('unauthenticated')
+          return true
         }
-      } else {
-        console.log('Authentication failed:', response.status)
+      }
+      
+      // Authentication failed
+      if (mountedRef.current && !loginInProgress.current) {
+        console.log('Authentication failed or no admin data')
         setAdmin(null)
         setAuthState('unauthenticated')
       }
+      return false
+      
     } catch (error) {
       console.error('Auth check error:', error)
-      if (mountedRef.current) {
+      if (mountedRef.current && !loginInProgress.current) {
         setAdmin(null)
-        setAuthState('error')
+        setAuthState('unauthenticated')
       }
+      return false
     } finally {
       isCheckingAuth.current = false
+      hasInitialized.current = true
     }
-  }, [])
+  }, [authState, admin])
 
   // Initial auth check on mount
   useEffect(() => {
     mountedRef.current = true
-    checkAuth()
+    
+    // Only check auth on initial load
+    if (!hasInitialized.current) {
+      checkAuth(false)
+    }
     
     return () => {
       mountedRef.current = false
@@ -78,7 +99,10 @@ export const useAuth = () => {
   }, [])
 
   const login = async (email: string, password: string) => {
+    if (!mountedRef.current) return { success: false, error: 'Component unmounted' }
+    
     try {
+      loginInProgress.current = true
       setAuthState('loading')
       console.log('Attempting login for:', email)
       
@@ -91,16 +115,26 @@ export const useAuth = () => {
         body: JSON.stringify({ email, password })
       })
 
+      if (!mountedRef.current) return { success: false, error: 'Component unmounted' }
+
       const data = await response.json()
       console.log('Login response:', response.status, response.ok)
 
       if (response.ok && data.admin) {
-        console.log('Login successful:', data.admin.email)
+        console.log('Login successful, setting admin state:', data.admin.email)
+        
+        // Set admin state immediately
         setAdmin(data.admin)
         setAuthState('authenticated')
         
-        // Navigate after successful login
-        router.replace('/admin')
+        // Navigate after a short delay to ensure state is set
+        setTimeout(() => {
+          if (mountedRef.current) {
+            console.log('Navigating to /admin')
+            router.replace('/admin')
+          }
+        }, 100)
+        
         return { success: true }
       } else {
         console.log('Login failed:', data.error || 'Unknown error')
@@ -110,21 +144,27 @@ export const useAuth = () => {
       }
     } catch (error) {
       console.error('Login network error:', error)
-      setAdmin(null)
-      setAuthState('error')
+      if (mountedRef.current) {
+        setAdmin(null)
+        setAuthState('unauthenticated')
+      }
       return { success: false, error: 'Network error. Please try again.' }
+    } finally {
+      loginInProgress.current = false
     }
   }
 
   const logout = async () => {
     try {
       console.log('Initiating logout...')
-      setAuthState('loading')
       
-      // Immediately clear the admin state
+      // Set logout state immediately
+      loginInProgress.current = false
       setAdmin(null)
+      setAuthState('loading')
+      hasInitialized.current = false
       
-      // Call the logout API
+      // Call logout API
       try {
         const response = await fetch('/api/auth/logout', {
           method: 'POST',
@@ -135,32 +175,32 @@ export const useAuth = () => {
         console.error('Logout API error (continuing anyway):', apiError)
       }
       
-      // Set state and navigate
+      // Final state update
       setAuthState('unauthenticated')
-      console.log('Logout complete, redirecting to login')
-      router.replace('/admin/login')
+      
+      // Navigate to login
+      setTimeout(() => {
+        if (mountedRef.current) {
+          router.replace('/admin/login')
+        }
+      }, 100)
       
     } catch (error) {
       console.error('Logout error:', error)
-      // Force logout even if something fails
+      // Force state reset even if something fails
+      loginInProgress.current = false
       setAdmin(null)
       setAuthState('unauthenticated')
+      hasInitialized.current = false
       router.replace('/admin/login')
     }
   }
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      mountedRef.current = false
-    }
-  }, [])
 
   return {
     admin,
     authState,
     loading: authState === 'loading',
-    isAuthenticated: authState === 'authenticated',
+    isAuthenticated: authState === 'authenticated' && admin !== null,
     isUnauthenticated: authState === 'unauthenticated',
     login,
     logout,

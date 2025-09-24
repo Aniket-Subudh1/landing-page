@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import Sidebar from '@/components/admin/Sidebar'
@@ -13,51 +13,48 @@ export default function AdminLayout({
   const pathname = usePathname()
   const router = useRouter()
   const { admin, loading, isAuthenticated, isUnauthenticated, logout } = useAuth()
-
-  console.log('AdminLayout render:', {
-    pathname,
-    admin: admin?.email || null,
-    loading,
-    isAuthenticated,
-    isUnauthenticated
-  })
+  const [isHydrated, setIsHydrated] = useState(false)
 
   useEffect(() => {
-    
-    if (pathname === '/admin/login') {
+    setIsHydrated(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isHydrated || loading) return
+
+    const isLoginPage = pathname === '/admin/login'
+
+    if (!isLoginPage && isUnauthenticated && !admin) {
+      console.log('Redirecting to login - authentication required')
+      router.replace('/admin/login')
       return
     }
 
-    
-    if (!loading && isUnauthenticated && !admin) {
-      console.log('Redirecting to login - authentication required')
-      router.replace('/admin/login')
+    if (isLoginPage && isAuthenticated && admin) {
+      console.log('Redirecting to dashboard - already authenticated')
+      router.replace('/admin')
+      return
     }
-  }, [admin, loading, isAuthenticated, isUnauthenticated, pathname, router])
+  }, [admin, loading, isAuthenticated, isUnauthenticated, pathname, router, isHydrated])
 
-
-  if (pathname === '/admin/login') {
-    console.log('Rendering login page')
-    return <>{children}</>
-  }
-
-
-  if (loading) {
-    console.log('Showing loading state')
+  if (!isHydrated || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
         <div className="text-center">
           <LoadingSpinner />
           <p className="mt-4 text-gray-600">
-            Checking authentication...
+            Loading...
           </p>
         </div>
       </div>
     )
   }
 
-  if (isUnauthenticated && !admin) {
-    console.log('No admin found, showing redirect message')
+  if (pathname === '/admin/login') {
+    return <>{children}</>
+  }
+
+  if (isUnauthenticated || !admin) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
         <div className="text-center">
@@ -68,26 +65,15 @@ export default function AdminLayout({
     )
   }
 
-  if (isAuthenticated && admin) {
-    console.log('Rendering admin layout for:', admin.email)
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex">
-        <Sidebar onLogout={logout} admin={admin} />
-        <div className="flex-1 lg:ml-64 p-4 lg:p-8">
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+      <Sidebar onLogout={logout} admin={admin} />
+      <div className="lg:ml-64">
+        <div className="p-4 lg:p-8">
           <div className="pt-16 lg:pt-0">
             {children}
           </div>
         </div>
-      </div>
-    )
-  }
-
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
-      <div className="text-center">
-        <LoadingSpinner />
-        <p className="mt-4 text-gray-600">Loading...</p>
       </div>
     </div>
   )

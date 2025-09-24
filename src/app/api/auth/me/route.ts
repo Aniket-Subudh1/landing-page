@@ -1,10 +1,44 @@
-// src/app/api/auth/me/route.ts
 import { NextRequest, NextResponse } from 'next/server'
-import { withAuth } from '@/lib/auth'
+import { verifyToken } from '@/lib/auth'
+import dbConnect from '@/lib/mongodb'
+import Admin from '@/models/Admin'
 
-export const GET = withAuth(async (request: NextRequest & { admin: any }) => {
+export async function GET(request: NextRequest) {
   try {
-    const { admin } = request
+    await dbConnect()
+    
+    // Get token from cookies
+    const token = request.cookies.get('auth-token')?.value
+    
+    if (!token) {
+      console.log('No auth token found')
+      return NextResponse.json(
+        { error: 'No authentication token' },
+        { status: 401 }
+      )
+    }
+
+    // Verify token
+    const decoded = verifyToken(token)
+    if (!decoded) {
+      console.log('Invalid token')
+      return NextResponse.json(
+        { error: 'Invalid or expired token' },
+        { status: 401 }
+      )
+    }
+
+    // Get admin from database
+    const admin = await Admin.findById(decoded.adminId)
+    if (!admin || !admin.isActive) {
+      console.log('Admin not found or inactive')
+      return NextResponse.json(
+        { error: 'Admin account not found or inactive' },
+        { status: 401 }
+      )
+    }
+
+    console.log('Auth check successful for:', admin.email)
     
     return NextResponse.json({
       admin: {
@@ -24,4 +58,4 @@ export const GET = withAuth(async (request: NextRequest & { admin: any }) => {
       { status: 500 }
     )
   }
-})
+}
