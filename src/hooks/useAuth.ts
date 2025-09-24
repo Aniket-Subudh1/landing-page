@@ -22,7 +22,7 @@ export const useAuth = () => {
       setLoading(true)
       const response = await fetch('/api/auth/me', {
         credentials: 'include',
-        cache: 'no-store' 
+        cache: 'no-store' // Prevent caching issues
       })
       
       if (response.ok) {
@@ -30,6 +30,7 @@ export const useAuth = () => {
         setAdmin(data.admin)
       } else {
         setAdmin(null)
+        // Only redirect if we're not already on the login page
         if (pathname && !pathname.includes('/login')) {
           router.push('/admin/login')
         }
@@ -37,17 +38,18 @@ export const useAuth = () => {
     } catch (error) {
       console.error('Auth check failed:', error)
       setAdmin(null)
+      // Only redirect if we're not already on the login page
       if (pathname && !pathname.includes('/login')) {
         router.push('/admin/login')
       }
     } finally {
       setLoading(false)
     }
-  }, [router, pathname])
+  }, [router, pathname]) // Remove the dependency that was causing infinite loop
 
   useEffect(() => {
     checkAuth()
-  }, []) 
+  }, []) // Only run once on mount, not when checkAuth changes
 
   const login = async (email: string, password: string) => {
     try {
@@ -88,6 +90,7 @@ export const useAuth = () => {
       router.push('/admin/login')
     } catch (error) {
       console.error('Logout error:', error)
+      // Force logout even if API call fails
       setAdmin(null)
       router.push('/admin/login')
     } finally {
