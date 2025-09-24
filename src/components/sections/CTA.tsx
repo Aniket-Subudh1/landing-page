@@ -31,7 +31,6 @@ With EasyMyPG app, rent comes on time and complaints are tracked automatically. 
       title: 'Gharapna PG Operator, Mumbai',
       avatar: '/dd.avif',
       quote: `"Handling 50+ tenants in Mumbai was total mess with Excel and calls. Since I joined EasyMyPG waitlist and got access, life is simple.
-
 Rent reminders go automatically, tenants pay on time, even their complaints come in-app. I actually save time and tenants also feel system is professional."`
     },
     {
@@ -40,7 +39,7 @@ Rent reminders go automatically, tenants pay on time, even their complaints come
       avatar: '/as.avif',
       quote: `"I love how friendly this app is. Before, tenants kept calling me for small issues and I had no proper record. Now they raise it in the app, and I track everything easily.
 
-Rent is smooth, no tension of late payments. Finally feels like I'm running my PG smart, not struggling daily."`
+      Rent is smooth, no tension of late payments. Finally feels like I'm running my PG smart, not struggling daily."`
     }
   ]
 
