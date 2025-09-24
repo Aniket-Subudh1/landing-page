@@ -394,7 +394,7 @@ const Hero: React.FC = () => {
               </motion.span>
             ))}
           </motion.div>
-          
+          <Link href="/waitlist" className="ml-2">
           <motion.button
             className=" font-bold cursor-pointer inline-block bg-transparent border-none text-inherit"
             initial={{ 
@@ -426,6 +426,7 @@ const Hero: React.FC = () => {
           >
             Join Now →
           </motion.button>
+          </Link>
         </div>
 
         {/* Phone Image */}
