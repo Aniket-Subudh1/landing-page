@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Home, 
   Users, 
@@ -12,10 +12,7 @@ import {
   Menu, 
   X, 
   BarChart3, 
-  UserCheck,
-  Phone,
-  Mail,
-  MapPin
+  UserCheck
 } from 'lucide-react'
 
 interface SidebarProps {
@@ -34,8 +31,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout, admin }) => {
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: Home },
     { name: 'Waitlist', href: '/admin/waitlist', icon: Users },
-    { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
-    { name: 'Settings', href: '/admin/settings', icon: Settings },
   ]
 
   const isActive = (href: string) => {
@@ -45,76 +40,42 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout, admin }) => {
     return pathname.startsWith(href)
   }
 
-  const sidebarVariants = {
-    open: {
-      x: 0,
-      transition: {
-        type: 'spring',
-        stiffness: 300,
-        damping: 40
-      }
-    },
-    closed: {
-      x: '-100%',
-      transition: {
-        type: 'spring',
-        stiffness: 300,
-        damping: 40
-      }
-    }
-  }
-
-  const overlayVariants = {
-    open: {
-      opacity: 1,
-      visibility: 'visible' as const
-    },
-    closed: {
-      opacity: 0,
-      visibility: 'hidden' as const
-    }
-  }
-
   return (
     <>
       {/* Mobile Menu Button */}
-      <button
-        onClick={() => setIsMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-[#1a0520] text-white rounded-lg shadow-lg"
-      >
-        <Menu className="w-6 h-6" />
-      </button>
+      <div className="lg:hidden fixed top-4 left-4 z-50">
+        <button
+          onClick={() => setIsMobileOpen(true)}
+          className="p-3 bg-[#1a0520] text-white rounded-xl shadow-lg"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
+      </div>
 
       {/* Mobile Overlay */}
-      <AnimatePresence>
-        {isMobileOpen && (
-          <motion.div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
-            variants={overlayVariants}
-            initial="closed"
-            animate="open"
-            exit="closed"
-            onClick={() => setIsMobileOpen(false)}
-          />
-        )}
-      </AnimatePresence>
+      {isMobileOpen && (
+        <div 
+          className="lg:hidden fixed inset-0 bg-black/50 z-40"
+          onClick={() => setIsMobileOpen(false)}
+        />
+      )}
 
       {/* Sidebar */}
-      <motion.div
-        className="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-[#1a0520] via-[#2e0730] to-[#1a0520] text-white z-50 lg:relative lg:translate-x-0"
-        variants={sidebarVariants}
-        initial="closed"
-        animate={isMobileOpen ? "open" : "closed"}
-        style={{ translateX: isMobileOpen ? '0%' : '-100%' }}
-      >
+      <div className={`
+        fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-[#1a0520] via-[#2e0730] to-[#1a0520] text-white z-50 transform transition-transform duration-300 ease-in-out
+        ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="p-6 border-b border-purple-800/30">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl flex items-center justify-center">
-                  <span className="font-bold text-[#1a0520]">E</span>
-                </div>
+                <Image
+                  src="/logo.png"
+                  alt="Logo"
+                    width={40}
+                    height={40}
+                />
                 <div>
                   <h2 className="text-lg font-semibold">EasyMyPG</h2>
                   <p className="text-xs text-purple-300">Admin Panel</p>
@@ -157,28 +118,23 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout, admin }) => {
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsMobileOpen(false)}
-                  className={`flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
-                    active
-                      ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 text-[#1a0520] shadow-lg transform scale-105'
-                      : 'text-purple-200 hover:bg-purple-800/30 hover:text-white hover:translate-x-2'
-                  }`}
+                  className={`
+                    flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200
+                    ${active 
+                      ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 text-[#1a0520] shadow-lg' 
+                      : 'text-purple-200 hover:bg-purple-800/30 hover:text-white'
+                    }
+                  `}
                 >
                   <Icon className="w-5 h-5 flex-shrink-0" />
                   <span>{item.name}</span>
-                  {active && (
-                    <motion.div
-                      className="w-2 h-2 bg-[#1a0520] rounded-full ml-auto"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                    />
-                  )}
+                  {active && <div className="w-2 h-2 bg-[#1a0520] rounded-full ml-auto" />}
                 </Link>
               )
             })}
           </nav>
 
-          {/* Footer */}
+          {/* Logout Button */}
           <div className="p-4 border-t border-purple-800/30">
             <button
               onClick={onLogout}
@@ -189,10 +145,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout, admin }) => {
             </button>
           </div>
         </div>
-      </motion.div>
-
-      {/* Desktop sidebar backdrop */}
-      <div className="hidden lg:block w-64 flex-shrink-0" />
+      </div>
     </>
   )
 }

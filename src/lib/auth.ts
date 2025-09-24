@@ -1,11 +1,15 @@
-import jwt from 'jsonwebtoken'
+import * as jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import Admin from '@/models/Admin'
 import dbConnect from './mongodb'
 
-const JWT_SECRET = process.env.JWT_SECRET
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN
+const JWT_SECRET = process.env.JWT_SECRET!
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d'
+
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required')
+}
 
 export interface JWTPayload {
   adminId: string
@@ -16,13 +20,24 @@ export interface JWTPayload {
 }
 
 export const generateToken = (payload: Omit<JWTPayload, 'iat' | 'exp'>): string => {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN })
+  try {
+    return jwt.sign(
+      payload,
+      JWT_SECRET,
+      { expiresIn: JWT_EXPIRES_IN }
+    )
+  } catch (error) {
+    console.error('Token generation failed:', error)
+    throw new Error('Failed to generate token')
+  }
 }
 
 export const verifyToken = (token: string): JWTPayload | null => {
   try {
-    return jwt.verify(token, JWT_SECRET) as JWTPayload
+    const decoded = jwt.verify(token, JWT_SECRET)
+    return decoded as JWTPayload
   } catch (error) {
+    console.error('Token verification failed:', error)
     return null
   }
 }
@@ -32,7 +47,7 @@ export const setAuthCookie = (response: NextResponse, token: string): NextRespon
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
-    maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
+    maxAge: 7 * 24 * 60 * 60,
     path: '/'
   })
   return response
@@ -44,9 +59,14 @@ export const clearAuthCookie = (response: NextResponse): NextResponse => {
 }
 
 export const getAuthToken = async (): Promise<string | null> => {
-  const cookieStore = cookies()
-  const authCookie = cookieStore.get('auth-token')
-  return authCookie?.value || null
+  try {
+    const cookieStore = await cookies()
+    const authCookie = cookieStore.get('auth-token')
+    return authCookie?.value || null
+  } catch (error) {
+    console.error('Failed to get auth token:', error)
+    return null
+  }
 }
 
 export const validateAuthToken = async (): Promise<JWTPayload | null> => {
@@ -56,7 +76,6 @@ export const validateAuthToken = async (): Promise<JWTPayload | null> => {
   return verifyToken(token)
 }
 
-// Middleware helper for protecting API routes
 export const withAuth = (handler: Function) => {
   return async (req: NextRequest, context?: any) => {
     try {
@@ -79,7 +98,6 @@ export const withAuth = (handler: Function) => {
         )
       }
 
-      // Verify admin still exists and is active
       const admin = await Admin.findById(decoded.adminId).select('+password')
       if (!admin || !admin.isActive) {
         return NextResponse.json(
@@ -88,7 +106,6 @@ export const withAuth = (handler: Function) => {
         )
       }
 
-      // Add admin to request context
       const requestWithAdmin = req as NextRequest & { admin: any }
       requestWithAdmin.admin = admin
 
@@ -103,14 +120,12 @@ export const withAuth = (handler: Function) => {
   }
 }
 
-// Rate limiting for auth endpoints
 const loginAttempts = new Map<string, { count: number; lastAttempt: Date }>()
 
 export const rateLimitLogin = (identifier: string): { allowed: boolean; resetTime?: Date } => {
   const now = new Date()
   const attempts = loginAttempts.get(identifier)
   
-  // Clean up old attempts (older than 15 minutes)
   if (attempts && (now.getTime() - attempts.lastAttempt.getTime()) > 15 * 60 * 1000) {
     loginAttempts.delete(identifier)
   }
@@ -132,7 +147,6 @@ export const rateLimitLogin = (identifier: string): { allowed: boolean; resetTim
   return { allowed: true }
 }
 
-// Password validation
 export const validatePassword = (password: string): { valid: boolean; message?: string } => {
   if (password.length < 8) {
     return { valid: false, message: 'Password must be at least 8 characters long' }
@@ -148,7 +162,6 @@ export const validatePassword = (password: string): { valid: boolean; message?: 
   return { valid: true }
 }
 
-// Email validation
 export const validateEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return emailRegex.test(email)

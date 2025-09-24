@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 
 interface Admin {
   id: string
@@ -15,11 +15,14 @@ export const useAuth = () => {
   const [admin, setAdmin] = useState<Admin | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
+  const pathname = usePathname()
 
   const checkAuth = useCallback(async () => {
     try {
+      setLoading(true)
       const response = await fetch('/api/auth/me', {
-        credentials: 'include'
+        credentials: 'include',
+        cache: 'no-store' // Prevent caching issues
       })
       
       if (response.ok) {
@@ -27,24 +30,30 @@ export const useAuth = () => {
         setAdmin(data.admin)
       } else {
         setAdmin(null)
-        if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
+        // Only redirect if we're not already on the login page
+        if (pathname && !pathname.includes('/login')) {
           router.push('/admin/login')
         }
       }
     } catch (error) {
       console.error('Auth check failed:', error)
       setAdmin(null)
+      // Only redirect if we're not already on the login page
+      if (pathname && !pathname.includes('/login')) {
+        router.push('/admin/login')
+      }
     } finally {
       setLoading(false)
     }
-  }, [router])
+  }, [router, pathname]) // Remove the dependency that was causing infinite loop
 
   useEffect(() => {
     checkAuth()
-  }, [checkAuth])
+  }, []) // Only run once on mount, not when checkAuth changes
 
   const login = async (email: string, password: string) => {
     try {
+      setLoading(true)
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
@@ -65,11 +74,14 @@ export const useAuth = () => {
       }
     } catch (error) {
       return { success: false, error: 'Network error. Please try again.' }
+    } finally {
+      setLoading(false)
     }
   }
 
   const logout = async () => {
     try {
+      setLoading(true)
       await fetch('/api/auth/logout', {
         method: 'POST',
         credentials: 'include'
@@ -78,6 +90,11 @@ export const useAuth = () => {
       router.push('/admin/login')
     } catch (error) {
       console.error('Logout error:', error)
+      // Force logout even if API call fails
+      setAdmin(null)
+      router.push('/admin/login')
+    } finally {
+      setLoading(false)
     }
   }
 

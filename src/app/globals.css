@@ -2,7 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
 
+.admin-sidebar {
+  flex-shrink: 0;
+}
+
+.admin-content {
+  flex: 1;
+  min-width: 0; /* Prevents content from overflowing */
+}
+
+/* Ensure proper scrolling */
+.admin-main {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+/* Mobile sidebar overlay */
+@media (max-width: 1023px) {
+  .admin-sidebar-mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 256px;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .admin-sidebar-mobile.open {
+    transform: translateX(0);
+  }
+}
+
+/* Desktop sidebar */
+@media (min-width: 1024px) {
+  .admin-sidebar-desktop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 256px;
+    z-index: 30;
+  }
+  
+  .admin-content-desktop {
+    margin-left: 256px;
+  }
+}
+
+/* Fix for any potential layout issues */
+.admin-page {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Responsive fixes for mobile */
+@media (max-width: 640px) {
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+}
 
 @layer base {
   :root {
