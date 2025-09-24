@@ -55,7 +55,7 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="hidden lg:flex items-center space-x-3">
+        <div className="hidden lg:flex items-center  space-x-3">
          
           <button className="px-4 py-2 text-sm font-medium bg-white rounded-lg border border-black text-black hover:text-gray-600 transition-colors duration-200">
             Free Access
@@ -95,7 +95,7 @@ const Navbar: React.FC = () => {
                 Free Access
               </button>
               <Link href="/waitlist">
-              <button className="w-full px-6 py-2 bg-yellow-400 border border-black hover:bg-yellow-500 text-gray-900 font-semibold text-sm rounded-lg transition-colors duration-200">
+              <button className="w-full px-6 py-2 mt-2 bg-yellow-400 border border-black hover:bg-yellow-500 text-gray-900 font-semibold text-sm rounded-lg transition-colors duration-200">
                 Download Now
               </button>
               </Link>

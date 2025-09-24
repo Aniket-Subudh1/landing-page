@@ -152,7 +152,8 @@ const Hero: React.FC = () => {
     }
   }
 
-  const containerVariants: Variants = {
+  // First line container variants
+  const firstLineContainerVariants: Variants = {
     visible: {
       transition: {
         staggerChildren: 0.08,
@@ -161,11 +162,21 @@ const Hero: React.FC = () => {
     }
   }
 
+  // Second line container variants - starts after first line finishes
+  const secondLineContainerVariants: Variants = {
+    visible: {
+      transition: {
+        staggerChildren: 0.05, // Faster stagger
+        delayChildren: 0.92 // Start after first line completes (0.2 + 4*0.08 + 0.4)
+      }
+    }
+  }
+
   const subtitleContainerVariants: Variants = {
     visible: {
       transition: {
         staggerChildren: 0.06,
-        delayChildren: 0.8
+        delayChildren: 1.4 // Adjusted for new heading timing
       }
     }
   }
@@ -174,7 +185,7 @@ const Hero: React.FC = () => {
     visible: {
       transition: {
         staggerChildren: 0.08,
-        delayChildren: 1.4
+        delayChildren: 2.0 // Adjusted for new heading timing
       }
     }
   }
@@ -183,7 +194,7 @@ const Hero: React.FC = () => {
     <section id="home" className="min-h-screen relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-full h-[800px] md:max-w-[1450px] sm:max-h-[860px] md:max-h-[960px] -mt-[245px] md:-mt-[450px] md:rounded-3xl 
+        <div className="w-full h-[800px] md:max-w-[1450px] sm:max-h-[860px] md:max-h-[960px]  -mt-[245px] md:-mt-[450px] md:rounded-3xl 
           [background:linear-gradient(145deg,#ffdbe1_0%,#fff1bd_40%,#fff1bd_60%,#ffcb0f_100%)]">
         </div>
       </div>
@@ -219,12 +230,12 @@ const Hero: React.FC = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            variants={containerVariants}
+            variants={firstLineContainerVariants}
           >
             {headingWords.slice(0, 4).map((word, index) => (
               <motion.span
                 key={`heading-word-${index}`}
-                className="inline-block mr-1.5"
+                className="inline-block mr-1.5 lg:mr-3"
                 variants={wordVariants}
               >
                 {word}
@@ -237,12 +248,12 @@ const Hero: React.FC = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            variants={containerVariants}
+            variants={secondLineContainerVariants}
           >
             {headingWords.slice(4).map((word, index) => (
               <motion.span
                 key={`heading-word-${index + 4}`}
-                className="inline-block mr-1.5"
+                className="inline-block mr-1.5 lg:mr-3"
                 variants={wordVariants}
               >
                 {word}
@@ -252,7 +263,7 @@ const Hero: React.FC = () => {
         </h1>
 
         {/* Subtitle */}
-       <motion.p className="text-sm md:text-lg text-[#290029ad]  font-medium max-w-xl px-2 pl-3  mx-auto  mb-10 text-justify [text-align-last:center]"
+       <motion.p className="text-sm md:text-lg text-[#290029ad]  font-medium max-w-xl px-2 lg:px-0 lg:max-w-5xl pl-3  mx-auto  mb-10 text-justify [text-align-last:center]"
 
           initial="hidden"
           whileInView="visible"
@@ -294,7 +305,7 @@ const Hero: React.FC = () => {
                 transition: {
                   duration: 0.4,
                   ease: 'easeInOut',
-                  delay: 1.8
+                  delay: 2.4
                 }
               }
             }}
@@ -324,7 +335,7 @@ const Hero: React.FC = () => {
       ...watchDemoVariants.visible,
       transition: {
         ...(watchDemoVariants.visible as { transition?: any }).transition,
-        delay: 1.9
+        delay: 2.5
       }
     }
   }}
@@ -358,7 +369,7 @@ const Hero: React.FC = () => {
               scale: 1,
               transition: {
                 duration: 0.5,
-                delay: 1.3,
+                delay: 1.9,
                 ease: [0.68, -0.55, 0.265, 1.55]
               }
             }}
@@ -399,7 +410,7 @@ const Hero: React.FC = () => {
               scale: 1,
               transition: {
                 duration: 0.4,
-                delay: 2.2,
+                delay: 2.8,
                 ease: [0.25, 0.46, 0.45, 0.94]
               }
             }}

@@ -38,8 +38,7 @@ Rent reminders go automatically, tenants pay on time, even their complaints come
       title: 'Riya PG Operator, Bengaluru',
       avatar: '/as.avif',
       quote: `"I love how friendly this app is. Before, tenants kept calling me for small issues and I had no proper record. Now they raise it in the app, and I track everything easily.
-
-      Rent is smooth, no tension of late payments. Finally feels like I'm running my PG smart, not struggling daily."`
+Rent is smooth, no tension of late payments. Finally feels like I'm running my PG smart, not struggling daily."`
     }
   ]
 
@@ -63,8 +62,8 @@ Rent reminders go automatically, tenants pay on time, even their complaints come
   }, [isHovered, controls])
 
   return (
-    <section className="py-20 md:-mt-24 -mt-16 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto text-center px-4">
+    <section className="py-20 md:-mt-24 -mt-16 bg-white">
+      <div className="max-w-7xl mx-auto text-center px-4 overflow-hidden">
         {/* Animated Heading */}
         <motion.h2 
           className="text-xl sm:text-4xl lg:text-[38px] text-[#1c0a28] leading-snug mb-16"
@@ -139,8 +138,8 @@ Rent reminders go automatically, tenants pay on time, even their complaints come
                 ease: [0.25, 0.46, 0.45, 0.94]
               }}
             >
-              <Card className="p-8 rounded-4xl border-gray-200 bg-white hover:shadow-md transition-shadow duration-200 min-h-[280px] flex flex-col">
-                <div className="flex items-start space-x-4 mb-6">
+              <Card className="p-8 rounded-4xl border-gray-200 bg-white hover:shadow-md transition-shadow duration-200 h-[320px] flex flex-col">
+                <div className="flex items-start space-x-4 mb-6 flex-shrink-0">
                   <div className="w-14 h-14 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
                     <Image
                       src={testimonial.avatar} 
@@ -167,8 +166,8 @@ Rent reminders go automatically, tenants pay on time, even their complaints come
                   </div>
                 </div>
 
-                <div className="flex-1">
-                  <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
+                <div className="flex-1 overflow-hidden">
+                  <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line line-clamp-8">
                     {testimonial.quote}
                   </p>
                 </div>
@@ -178,7 +177,7 @@ Rent reminders go automatically, tenants pay on time, even their complaints come
         </div>
 
         {/* Mobile Cards - Infinite Horizontal Scroll */}
-        <div className="lg:hidden">
+        <div className="lg:hidden relative">
           <motion.div 
             className="flex gap-6 text-left"
             animate={controls}
@@ -189,7 +188,7 @@ Rent reminders go automatically, tenants pay on time, even their complaints come
             {duplicatedTestimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
-                className="flex-shrink-0 w-80"
+                className="flex-shrink-0"
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
@@ -199,8 +198,8 @@ Rent reminders go automatically, tenants pay on time, even their complaints come
                   ease: [0.25, 0.46, 0.45, 0.94]
                 }}
               >
-                <Card className="p-6 rounded-2xl border-gray-200 bg-white shadow-sm min-h-[280px] flex flex-col">
-                  <div className="flex items-start space-x-4 mb-4">
+                <Card className="p-6 rounded-2xl border-gray-200 bg-white shadow-sm h-[320px] w-[280px] flex flex-col">
+                  <div className="flex items-start space-x-4 mb-4 flex-shrink-0">
                     <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
                       <Image
                         src={testimonial.avatar} 
@@ -227,8 +226,8 @@ Rent reminders go automatically, tenants pay on time, even their complaints come
                     </div>
                   </div>
 
-                  <div className="flex-1">
-                    <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
+                  <div className="flex-1 overflow-hidden">
+                    <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line line-clamp-8">
                       {testimonial.quote}
                     </p>
                   </div>
