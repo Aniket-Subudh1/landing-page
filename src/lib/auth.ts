@@ -1,10 +1,10 @@
-import * as jwt from 'jsonwebtoken'
+import jwt, { SignOptions } from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import Admin from '@/models/Admin'
 import dbConnect from './mongodb'
 
-const JWT_SECRET = process.env.JWT_SECRET!
+const JWT_SECRET: string = process.env.JWT_SECRET || ''
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d'
 
 if (!JWT_SECRET) {
@@ -21,11 +21,11 @@ export interface JWTPayload {
 
 export const generateToken = (payload: Omit<JWTPayload, 'iat' | 'exp'>): string => {
   try {
-    return jwt.sign(
-      payload,
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
-    )
+    const options: SignOptions = {
+      expiresIn: JWT_EXPIRES_IN as any
+    }
+    
+    return jwt.sign(payload, JWT_SECRET, options)
   } catch (error) {
     console.error('Token generation failed:', error)
     throw new Error('Failed to generate token')

@@ -6,9 +6,13 @@ import { generateToken, setAuthCookie, rateLimitLogin } from '@/lib/auth'
 export async function POST(request: NextRequest) {
   try {
     await dbConnect()
-    
+    // @ts-ignore
     const { email, password } = await request.json()
-    const clientIP = request.ip || request.headers.get('x-forwarded-for') || 'unknown'
+   // @ts-ignore
+    const clientIP = request.headers.get('x-forwarded-for') || 
+                     request.headers.get('x-real-ip') || 
+                     request.headers.get('cf-connecting-ip') || 
+                     'unknown'
 
     // Validation
     if (!email || !password) {
@@ -49,7 +53,7 @@ export async function POST(request: NextRequest) {
 
     // Generate token
     const token = generateToken({
-      adminId: admin._id.toString(),
+      adminId: (admin._id as any).toString(),
       email: admin.email,
       role: admin.role
     })
