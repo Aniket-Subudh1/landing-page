@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Eye, EyeOff, LogIn, Mail, Lock } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
@@ -11,26 +12,67 @@ const LoginPage = () => {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const router = useRouter()
   
-  const { login, loading } = useAuth()
+  const { login, loading, isAuthenticated, admin } = useAuth()
 
-  if (loading) {
-    return <LoadingSpinner />
-  }
+  // Only redirect if user navigates directly to login page while already authenticated
+  useEffect(() => {
+    if (!loading && !isSubmitting && isAuthenticated && admin) {
+      console.log('User already authenticated on page load, redirecting to admin')
+      router.replace('/admin')
+    }
+  }, [loading, isSubmitting, isAuthenticated, admin, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (isSubmitting) return // Prevent double submission
+    
     setError('')
-    setIsLoading(true)
+    setIsSubmitting(true)
 
-    const result = await login(email, password)
-    
-    if (!result.success) {
-      setError(result.error || 'Login failed')
+    try {
+      console.log('Submitting login form...')
+      const result = await login(email, password)
+      
+      if (result.success) {
+        console.log('Login successful, redirecting to admin...')
+        // Redirect on successful login
+        router.replace('/admin')
+      } else {
+        setError(result.error || 'Login failed')
+        setIsSubmitting(false) // Only reset on failure
+      }
+    } catch (error) {
+      console.error('Login submit error:', error)
+      setError('An unexpected error occurred')
+      setIsSubmitting(false)
     }
-    
-    setIsLoading(false)
+  }
+
+  // Show loading spinner only during initial auth check (not during form submission)
+  if (loading && !isSubmitting) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <LoadingSpinner />
+          <p className="mt-4 text-gray-600">Checking authentication...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // If authenticated and not currently submitting, show redirecting message
+  if (isAuthenticated && admin && !isSubmitting) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <LoadingSpinner />
+          <p className="mt-4 text-gray-600">Redirecting to dashboard...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -113,7 +155,7 @@ const LoginPage = () => {
                 placeholder="admin@easymypg.com"
                 className="w-full px-4 py-3 bg-white/60 backdrop-blur-sm border border-gray-300 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-200"
                 required
-                disabled={isLoading}
+                disabled={isSubmitting || loading}
               />
             </div>
 
@@ -131,13 +173,13 @@ const LoginPage = () => {
                   placeholder="Enter your password"
                   className="w-full px-4 py-3 pr-12 bg-white/60 backdrop-blur-sm border border-gray-300 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-200"
                   required
-                  disabled={isLoading}
+                  disabled={isSubmitting || loading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  disabled={isLoading}
+                  disabled={isSubmitting || loading}
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -151,10 +193,10 @@ const LoginPage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isSubmitting || loading}
               className="w-full py-3 bg-[#1a0520] hover:bg-[#2e0730] text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-yellow-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center"
             >
-              {isLoading ? (
+              {isSubmitting ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
                   Signing In...
