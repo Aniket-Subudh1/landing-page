@@ -197,7 +197,7 @@ const PGComparison: React.FC = () => {
                     transition: { duration: 0.5, delay: 0.4 }
                   } : { y: 20, opacity: 0 }}
                 >
-                  Normal using Pg
+                  Normal Pg using
                 </motion.div>
               </div>
 
